@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Verify — T-Shirt Scanner</title>
+    <meta name="description" content="Verify and collect T-Shirt for a participant">
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <!-- Loading State -->
+    <div class="loading-container" id="loading">
+        <div class="spinner"></div>
+        <p class="loading-text">Looking up participant...</p>
+    </div>
+
+    <!-- Error State -->
+    <div class="error-container" id="error" style="display:none;">
+        <div class="error-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>
+            </svg>
+        </div>
+        <h2 class="error-title">Not Found</h2>
+        <p class="error-message">This QR code is not recognized.</p>
+        <a href="/?autostart=true" class="btn-primary btn-scan" style="margin-top:16px; text-decoration:none;">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="8" height="8" rx="1"/><rect x="14" y="2" width="8" height="8" rx="1"/><rect x="2" y="14" width="8" height="8" rx="1"/><path d="M14 14h2v2h-2z"/><path d="M20 14h2v2h-2z"/><path d="M14 20h2v2h-2z"/><path d="M20 20h2v2h-2z"/><path d="M17 14h0v8"/><path d="M14 17h8"/></svg>
+            Scan Another
+        </a>
+    </div>
+
+    <!-- Main Content -->
+    <div class="verify-container" id="verify-content" style="display:none;">
+        <!-- Status Section -->
+        <div class="verify-status">
+            <div class="status-icon ready" id="status-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="20 6 9 17 4 12"/>
+                </svg>
+            </div>
+            <h1 class="status-label ready" id="status-label">READY</h1>
+            <p class="status-sub" id="status-sub">T-shirt is ready for pickup</p>
+        </div>
+
+        <!-- Person Card -->
+        <div class="person-card">
+            <h2 class="person-name" id="person-name">—</h2>
+            <div class="person-details">
+                <div class="detail-row">
+                    <div class="detail-icon email">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <rect x="2" y="4" width="20" height="16" rx="2"/>
+                            <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/>
+                        </svg>
+                    </div>
+                    <span class="detail-text" id="person-email">—</span>
+                </div>
+                <div class="detail-row">
+                    <div class="detail-icon dept">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <rect x="4" y="2" width="16" height="20" rx="2"/>
+                            <path d="M9 22v-4h6v4"/>
+                            <path d="M8 6h.01"/><path d="M16 6h.01"/><path d="M12 6h.01"/>
+                            <path d="M12 10h.01"/><path d="M12 14h.01"/>
+                            <path d="M16 10h.01"/><path d="M16 14h.01"/>
+                            <path d="M8 10h.01"/><path d="M8 14h.01"/>
+                        </svg>
+                    </div>
+                    <span class="detail-text" id="person-dept">—</span>
+                </div>
+                <div class="detail-row">
+                    <div class="detail-icon year">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <rect x="3" y="4" width="18" height="18" rx="2"/>
+                            <line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/>
+                            <line x1="3" y1="10" x2="21" y2="10"/>
+                        </svg>
+                    </div>
+                    <span class="detail-text" id="person-year">—</span>
+                </div>
+            </div>
+
+            <!-- T-Shirt Size Badge -->
+            <div class="size-badge-container">
+                <div class="size-badge">
+                    <span class="size-label">T-Shirt</span>
+                    <span class="size-value" id="person-size">—</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Token Display -->
+        <div class="token-display">
+            <p class="token-label">Token ID</p>
+            <p class="token-value" id="token-value">—</p>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="actions">
+            <button class="btn-primary btn-mark" id="btn-mark">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M20.38 3.46 16 2a4 4 0 0 1-8 0L3.62 3.46a2 2 0 0 0-1.34 2.23l.58 3.47a1 1 0 0 0 1 .84H6v10c0 1.1.9 2 2 2h8a2 2 0 0 0 2-2V10h2.14a1 1 0 0 0 1-.84l.58-3.47a2 2 0 0 0-1.34-2.23z"/>
+                </svg>
+                Mark as Collected
+            </button>
+
+            <button class="btn-primary btn-reset" id="btn-reset" style="display:none;">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M3 7v6h6"/><path d="M21 17a9 9 0 0 0-9-9 9 9 0 0 0-6 2.3L3 13"/>
+                </svg>
+                Undo / Reset
+            </button>
+
+            <a href="/?autostart=true" class="btn-primary btn-ghost" style="text-decoration:none;">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="2" y="2" width="8" height="8" rx="1"/>
+                    <rect x="14" y="2" width="8" height="8" rx="1"/>
+                    <rect x="2" y="14" width="8" height="8" rx="1"/>
+                    <path d="M14 14h2v2h-2z"/><path d="M20 14h2v2h-2z"/>
+                    <path d="M14 20h2v2h-2z"/><path d="M20 20h2v2h-2z"/>
+                    <path d="M17 14h0v8"/><path d="M14 17h8"/>
+                </svg>
+                Scan Next
+            </a>
+        </div>
+    </div>
+
+    <script src="/static/app.js?v=2"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', initVerifyPage);
+    </script>
+</body>
+</html>
