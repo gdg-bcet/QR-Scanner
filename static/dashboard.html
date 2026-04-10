@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard — T-Shirt Distribution</title>
+    <meta name="description" content="View all participants and collection status">
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <div class="app-container full-width">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-badge">
+                <span class="dot"></span>
+                Cloud Study Jams 2025
+            </div>
+            <h1>Distribution Dashboard</h1>
+            <p>Track T-Shirt collection status for all participants</p>
+        </header>
+
+        <!-- Stats Bar -->
+        <div class="stats-bar">
+            <div class="stat-chip total">
+                <span class="value" id="stat-total">—</span>
+                <span class="label">Total</span>
+            </div>
+            <div class="stat-chip taken">
+                <span class="value" id="stat-taken">—</span>
+                <span class="label">Collected</span>
+            </div>
+            <div class="stat-chip remaining">
+                <span class="value" id="stat-remaining">—</span>
+                <span class="label">Remaining</span>
+            </div>
+        </div>
+
+        <!-- Controls -->
+        <div class="dashboard-header">
+            <input type="text" class="search-input" id="search-input" placeholder="Search by name, email, or department...">
+            <a href="/" class="nav-link">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="2" y="2" width="8" height="8" rx="1"/>
+                    <rect x="14" y="2" width="8" height="8" rx="1"/>
+                    <rect x="2" y="14" width="8" height="8" rx="1"/>
+                </svg>
+                Scanner
+            </a>
+        </div>
+
+        <!-- Participants Table -->
+        <div class="participants-table">
+            <table>
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Department</th>
+                        <th>Year</th>
+                        <th>Size</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody id="participants-tbody">
+                    <tr>
+                        <td colspan="7" style="text-align:center; padding:40px; color:var(--text-muted);">
+                            Loading participants...
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script src="/static/app.js?v=2"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', initDashboardPage);
+    </script>
+</body>
+</html>
